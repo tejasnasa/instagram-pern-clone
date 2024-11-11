@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ServiceResponse } from "../../models/serviceResponse";
-import { prisma } from "../../dev";
+import { prisma } from "../../index";
 
 const unfollowUser = async (req: Request, res: Response) => {
   const followingId = req.params.id;

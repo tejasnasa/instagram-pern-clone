@@ -2,9 +2,10 @@
   "name": "insta-clone-server",
   "version": "1.0.0",
   "scripts": {
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/dev.js\" ",
-    "build": "tsc",
-    "start": "nodemon dist/index.js"
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\" ",
+    "build": "prisma generate && tsc",
+    "start": "nodemon dist/index.js",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "Tejas Nasa",

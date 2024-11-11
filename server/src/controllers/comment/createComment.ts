@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ServiceResponse } from "../../models/serviceResponse";
-import { prisma } from "../../dev";
+import { prisma } from "../../index";
 
 const createComment = async (req: Request, res: Response) => {
   const { text } = req.body;
