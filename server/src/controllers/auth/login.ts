@@ -27,19 +27,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     const token = createToken({
-      userId: user.id,
+      userid: user.id,
     });
 
     res.status(200).json(
       ServiceResponse.success("Sign-in successful", {
         accessToken: token,
-        user: {
-          email: user.email,
-          username: user.username,
-          fullname: user.fullname,
-          avatar: user.avatar,
-          bio: user.bio,
-        },
+        user
       })
     );
     return;

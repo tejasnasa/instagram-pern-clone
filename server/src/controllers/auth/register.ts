@@ -48,7 +48,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
       });
 
       const token = createToken({
-        userId: newUser.id,
+        userid: newUser.id,
       });
       await deleteFirebaseUser(firebaseUser);
 

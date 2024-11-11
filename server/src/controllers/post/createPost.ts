@@ -3,7 +3,8 @@ import { ServiceResponse } from "../../models/serviceResponse";
 import { prisma } from "../../dev";
 
 const createPost = async (req: Request, res: Response) => {
-  const { caption, imageurl, userid } = req.body;
+  const { userid } = req.body.user;
+  const { caption, imageurl } = req.body;
 
   try {
     const user = await prisma.user.findUnique({

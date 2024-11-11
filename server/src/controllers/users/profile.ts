@@ -9,11 +9,7 @@ const profile = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({
       where: { id: id },
       include: {
-        posts: {
-          select: {
-            imageurl: true,
-          },
-        },
+        posts: true,
         followers: { include: { follower: true } },
         following: { include: { following: true } },
       },
