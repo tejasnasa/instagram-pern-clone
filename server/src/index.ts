@@ -1,13 +1,14 @@
 import app from "./app";
-import mongoose from "mongoose";
+import { PrismaClient } from "@prisma/client";
+export const prisma = new PrismaClient();
 
-mongoose
-  .connect(process.env.MONGO_SECRET)
+prisma
+  .$connect()
   .then(() => {
-    console.log("Database connected!");
+    console.log("Connected to the database.");
   })
   .catch((err) => {
-    console.log(err);
+    console.log("Failed to connect to the database:", err);
   });
 
 export default app;
