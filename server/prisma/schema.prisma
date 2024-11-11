@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid()) @unique
+  username  String    @unique
+  fullname  String    
+  email     String    @unique
+  password  String
+  avatar    String?
+  bio       String?
+  followers Follow[]  @relation("UserFollowers")
+  following Follow[]  @relation("UserFollowing")
+  posts     Post[]
+  comments  Comment[]
+  likes     Like[]
+
+  @@map ("users")
+}
+
+model Post {
+  id          String       @id @default(uuid()) @unique
+  userid      String 
+  user        User      @relation(fields: [userid], references: [id])
+  caption     String?
+  imageurl    String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  likes       Like[]
+  comments    Comment[]
+
+  @@map ("posts")
+}
+
+model Like {
+  id      String   @id @default(uuid()) @unique
+  userid  String 
+  postid  String 
+  user    User  @relation(fields: [userid], references: [id])
+  post    Post  @relation(fields: [postid], references: [id])
+
+  @@unique([userid, postid])
+
+  @@map ("likes")
+}
+
+model Comment {
+  id          String       @id @default(uuid()) @unique
+  userid      String 
+  postid      String 
+  text        String
+  created_at  DateTime  @default(now())
+  user        User      @relation(fields: [userid], references: [id])
+  post        Post      @relation(fields: [postid], references: [id])
+
+  @@map ("comments")
+}
+
+model Follow {
+  id              String    @id @default(uuid())
+  followerid      String 
+  followingid     String 
+  follower        User      @relation("UserFollowers", fields: [followerid], references: [id])
+  following       User      @relation("UserFollowing", fields: [followingid], references: [id])
+
+  @@unique([followerid, followingid])
+
+  @@map ("follows")
+}
