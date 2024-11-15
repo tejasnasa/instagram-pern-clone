@@ -5,7 +5,7 @@ import { prisma } from "../../index";
 const followUser = async (req: Request, res: Response) => {
   const followingId = req.params.id;
   const followerId = req.body.user.userid;
-
+ 
   try {
     if (followerId === followingId) {
       res

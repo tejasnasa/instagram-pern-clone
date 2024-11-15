@@ -8,7 +8,7 @@ import getPersonalDetails from "../controllers/users/getPersonalDetails";
 const userRouter = express.Router();
 
 userRouter.get("/", viewAllUsers);
-userRouter.get("/:id", profile);
+userRouter.get("/profile/:id", profile);
 userRouter.post("/follow/:id", followUser)
 userRouter.delete("/unfollow/:id", unfollowUser)
 userRouter.get("/self", getPersonalDetails)

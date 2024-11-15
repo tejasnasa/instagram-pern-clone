@@ -3,16 +3,11 @@ import { prisma } from "../../index";
 import { ServiceResponse } from "../../models/serviceResponse";
 
 const getPersonalDetails = async (req: Request, res: Response) => {
-  const id = req.body.user.userid;
+  const { userid } = req.body.user;
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: id },
-      include: {
-        posts: true,
-        followers: { include: { follower: true } },
-        following: { include: { following: true } },
-      },
+      where: { id: userid },
     });
 
     if (!user) {
