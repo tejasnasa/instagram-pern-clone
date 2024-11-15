@@ -21,8 +21,8 @@ model User {
   password  String    @default(uuid())
   avatar    String?   @default("")
   bio       String?   @default("")
-  followers Follow[]  @relation("UserFollowers")
-  following Follow[]  @relation("UserFollowing")
+  followers Follow[]  @relation("UserFollowing")
+  following Follow[]  @relation("UserFollowers")
   posts     Post[]
   comments  Comment[]
   likes     Like[]

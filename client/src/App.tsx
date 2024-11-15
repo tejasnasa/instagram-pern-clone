@@ -1,35 +1,103 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import HomePage from "./pages/Home";
+import LoginPage from "./pages/Login";
+import ProfilePage from "./pages/Profile";
+import SignUpPage from "./pages/Signup";
+import CreatePost from "./pages/CreatePost";
+import PeoplePage from "./pages/People";
+import PostDetails from "./pages/Post";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+    setIsLoading(false);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    setIsAuthenticated(false);
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <>
+    <Router>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Instagram Clone</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+        <nav>
+          {isAuthenticated && <button onClick={handleLogout}>Logout</button>}
+        </nav>
 
-export default App
+        <Routes>
+          <Route
+            path="/"
+            element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/signup"
+            element={
+              !isAuthenticated ? (
+                <SignUpPage
+                  setAuth={setIsAuthenticated}
+                />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              !isAuthenticated ? (
+                <LoginPage
+                  setAuth={setIsAuthenticated}
+                />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          <Route
+            path="/post/:postid"
+            element={
+              isAuthenticated ? <PostDetails/> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/create"
+            element={
+              isAuthenticated ? <CreatePost /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/profile/:id"
+            element={
+              isAuthenticated ? <ProfilePage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/people"
+            element={
+              isAuthenticated ? <PeoplePage /> : <Navigate to="/login" />
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
+  );
+};
+
+export default App;

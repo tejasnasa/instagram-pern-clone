@@ -5,6 +5,6 @@ import unlikePost from "../controllers/like/unlikePost";
 const likeRouter = express.Router();
 
 likeRouter.post("/:postid", likePost);
-likeRouter.delete("/:postid", unlikePost);
+likeRouter.post("/unlike/:postid", unlikePost);
 
 export default likeRouter;

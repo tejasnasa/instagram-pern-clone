@@ -9,8 +9,8 @@ const userRouter = express.Router();
 
 userRouter.get("/", viewAllUsers);
 userRouter.get("/profile/:id", profile);
-userRouter.post("/follow/:id", followUser)
-userRouter.delete("/unfollow/:id", unfollowUser)
-userRouter.get("/self", getPersonalDetails)
+userRouter.post("/follow/:id", followUser);
+userRouter.post("/unfollow/:id", unfollowUser);
+userRouter.get("/self", getPersonalDetails);
 
 export default userRouter;
