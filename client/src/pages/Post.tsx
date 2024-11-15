@@ -66,7 +66,7 @@ const PostDetails: React.FC = () => {
 
   const handleLikeToggle = async () => {
     try {
-      const like = isLiked
+      isLiked
         ? await axios.post(
             `${import.meta.env.VITE_BASE_URL}/v1/like/unlike/${postid}`,
             {},
