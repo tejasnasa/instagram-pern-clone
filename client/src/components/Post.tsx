@@ -105,7 +105,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
             }`}
           />
           <CiHeart className="mr-2 ml-2" />
-          <Link to={`/post/${post.id}`}>
+          <Link to={`#`}>
             <FaRegComment />
           </Link>
         </span>
@@ -113,7 +113,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
         <p className="font-semibold">{post.likes.length} likes</p>
         <p className="mb-2 mt-1">{post.caption}</p>
 
-        <Link to={`/post/${post.id}`} className="text-gray-400">
+        <Link to={`#`} className="text-gray-400">
           View Comments
         </Link>
         <p className="text-gray-400 mt-1">Add a comment...</p>

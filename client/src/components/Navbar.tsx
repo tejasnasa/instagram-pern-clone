@@ -135,53 +135,38 @@ const Navbar: React.FC<NavbarProps> = ({ handleLogout }) => {
 
         <div
           id="dropdownTop"
-          className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+          className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-[#262626] "
         >
           <ul
             className="py-2 text-sm text-gray-700 dark:text-gray-200"
             aria-labelledby="dropdownTopButton"
           >
             <li>
-              <a
-                href="#"
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Dashboard
+              <a href="#" className="block px-4 py-2">
+                Your Activity
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
+              <a href="#" className="block px-4 py-2">
                 Settings
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Earnings
+              <a href="#" className="block px-4 py-2">
+                Saved
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Sign out
+              <a href="#" className="block px-4 py-2">
+                Switch Accounts
               </a>
-            </li>
-            <li>
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 text-white px-4 py-2 rounded"
-              >
-                Logout
-              </button>
             </li>
           </ul>
+          <div className="py-2">
+            <button onClick={handleLogout} className="block px-4 py-2">
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </div>
