@@ -20,7 +20,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ setAuth }) => {
     }));
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/v1/auth/login`,

@@ -21,7 +21,8 @@ const SignUpPage: React.FC<SignUpPageProps> = ({ setAuth }) => {
     }));
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       const response = await axios.post(
         "${import.meta.env.VITE_BASE_URL}/v1/auth/register",
