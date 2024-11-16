@@ -60,7 +60,7 @@ const CreatePost = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col content-center">
       <h2>Create Post</h2>
       <input
         type="text"

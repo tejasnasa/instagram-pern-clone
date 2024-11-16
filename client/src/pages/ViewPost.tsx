@@ -5,8 +5,14 @@ import { useParams } from "react-router-dom";
 interface Post {
   id: string;
   caption: string;
-  imgUrl: string;
-  likes: Array<{ userid: string }>;
+  imageurl: string;
+  user: {
+    username: string;
+    avatar: string;
+  };
+  userid: string;
+  likes: any[];
+  comments: any[];
 }
 
 const PostDetails: React.FC = () => {
@@ -106,7 +112,7 @@ const PostDetails: React.FC = () => {
   return (
     <div>
       <h2>Post Details</h2>
-      <img src={post.imgUrl} alt="Post" style={{ maxWidth: "100%" }} />
+      <img src={post.imageurl} alt="Post" style={{ maxWidth: "100%" }} />
       <p>{post.caption}</p>
       <p>Likes: {post.likes.length}</p>
       <button onClick={handleLikeToggle}>{isLiked ? "Unlike" : "Like"}</button>

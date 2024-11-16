@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { SlOptions } from "react-icons/sl";
+import { FaHeart } from "react-icons/fa";
+import { BiSolidMessageRounded } from "react-icons/bi";
 
 interface UserProfile {
   id: string;
   username: string;
+  fullname: string;
   avatar: string;
-  email: string;
+  bio: string;
   posts: Array<any>;
   followers: Array<{ id: string }>;
   following: Array<{ id: string }>;
@@ -48,7 +52,6 @@ const ProfilePage: React.FC = () => {
         const profile = response.data.responseObject;
         setUserProfile(profile);
 
-        // Once logged-in user ID and profile are fetched, check follow status
         if (loggedInUserId) {
           const isUserFollowing = profile.followers.some(
             (followingUser: any) => followingUser.id === loggedInUserId
@@ -96,30 +99,76 @@ const ProfilePage: React.FC = () => {
   const isSelf = loggedInUserId === userProfile.id;
 
   return (
-    <div>
-      <h2>{userProfile.username}'s Profile</h2>
-      <div>
-        <img src={userProfile.avatar || "default-avatar.png"} alt="Avatar" />
-        <p>Email: {userProfile.email}</p>
-      </div>
-      {!isSelf && (
-        <button onClick={handleFollowToggle}>
-          {isFollowing ? "Unfollow" : "Follow"}
-        </button>
-      )}
-      <h3>Posts</h3>
-      <div>
-        {userProfile.posts.length > 0 ? (
-          userProfile.posts.map((post) => (
-            <div key={post.id}>
-              <p>{post.caption}</p>
-            </div>
-          ))
-        ) : (
-          <p>No posts found</p>
-        )}
-      </div>
-    </div>
+    <main className="bg-black text-white pl-[400px] pr-48 h-dvh w-dvw">
+      <section className="flex ml-12">
+        <img
+          src={userProfile.avatar || "default-avatar.png"}
+          alt="Avatar"
+          className="h-40 rounded-full m-12"
+        />
+
+        <div className="m-10 ml-16">
+          <div className="flex mb-6 items-center">
+            <h1 className="text-xl mr-5">{userProfile.username}</h1>
+            {!isSelf && (
+              <button
+                onClick={handleFollowToggle}
+                className="bg-[#1877F2] pt-1 pb-1 pr-5 pl-5 mr-5 rounded-lg text-center justify-center"
+              >
+                {isFollowing ? "Unfollow" : "Follow"}
+              </button>
+            )}
+            <SlOptions />
+          </div>
+          <div className="mb-6">
+            <span className="m-4 ml-0">{userProfile.posts.length} posts</span>
+            <span className="m-4">
+              {userProfile.followers.length} followers
+            </span>
+            <span className="m-4">
+              {userProfile.following.length} following
+            </span>
+          </div>
+          <div>
+            <h5>{userProfile.fullname}</h5>
+            <p>{userProfile.bio}</p>
+          </div>
+        </div>
+      </section>
+      <hr />
+      <br /><br />
+      <section>
+        <div className="grid grid-cols-3 gap-1">
+          {userProfile.posts.length > 0 ? (
+            userProfile.posts.map((post) => (
+              <Link
+                key={post.id}
+                to={`/post/${post.id}`}
+                className="relative aspect-square bg-black overflow-hidden"
+              >
+                <img
+                  src={post.imageurl}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center text-white opacity-0 hover:opacity-100 transition-opacity">
+                  <div className="flex">
+                    <span className="flex items-center text-xl font-bold m-4">
+                      <FaHeart />&nbsp;{post.likes.length}
+                    </span>
+                    <span className="flex items-center text-xl font-bold m-4">
+                      <BiSolidMessageRounded />&nbsp;{post.comments.length}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p>No posts found</p>
+          )}
+        </div>
+      </section>
+    </main>
   );
 };
 

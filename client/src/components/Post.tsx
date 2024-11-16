@@ -45,7 +45,6 @@ const Post: React.FC<PostProps> = ({ post }) => {
     }
   }, [loggedInUserId]);
 
-  // Check if the post is liked by the logged-in user
   useEffect(() => {
     if (loggedInUserId) {
       setIsLiked(

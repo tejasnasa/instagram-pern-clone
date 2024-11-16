@@ -48,7 +48,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleLogout }) => {
     <div className="pt-6 w-64 bg-black text-white flex flex-col justify-between h-lvh fixed">
       <div>
         <img
-          src="images/login2.png"
+          src="/images/login2.png"
           alt="instagram"
           className="h-14 flex flex-col justify-between"
         />
