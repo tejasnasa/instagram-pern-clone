@@ -19,7 +19,7 @@ model User {
   fullname  String    
   email     String    @unique
   password  String    @default(uuid())
-  avatar    String?   @default("")
+  avatar    String?   @default("https://i.imgur.com/V4RclNb.png")
   bio       String?   @default("")
   followers Follow[]  @relation("UserFollowing")
   following Follow[]  @relation("UserFollowers")

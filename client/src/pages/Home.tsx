@@ -1,6 +1,7 @@
+// src/pages/HomePage.tsx
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import Post from "../components/Post";
 
 const HomePage: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -26,25 +27,16 @@ const HomePage: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <main className="bg-black pl-16 pr-16 text-white">
       <h1>Home Page</h1>
-      {Array.isArray(posts) && posts.length > 0 ? (
-        posts.map((post) => (
-          <div key={post.id}>
-            <p>{post.caption}</p>
-            <p>Posted by: {post.user.username}</p>
-            <p>
-              Posted by:{" "}
-              <Link to={`/profile/${post.userid}`}>{post.user.username}</Link>
-            </p>
-            <p>Likes: {post.likes.length}</p>
-            <Link to={`/post/${post.id}`}>View Comments</Link>
-          </div>
-        ))
-      ) : (
-        <p>No posts available.</p>
-      )}
-    </div>
+      <section className="flex flex-wrap flex-col items-center">
+        {Array.isArray(posts) && posts.length > 0 ? (
+          posts.map((post) => <Post key={post.id} post={post} />)
+        ) : (
+          <p>No posts available.</p>
+        )}
+      </section>
+    </main>
   );
 };
 

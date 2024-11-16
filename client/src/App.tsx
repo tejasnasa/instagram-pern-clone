@@ -11,7 +11,7 @@ import ProfilePage from "./pages/Profile";
 import SignUpPage from "./pages/Signup";
 import CreatePost from "./pages/CreatePost";
 import PeoplePage from "./pages/People";
-import PostDetails from "./pages/Post";
+import PostDetails from "./pages/ViewPost";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -37,10 +37,6 @@ const App: React.FC = () => {
   return (
     <Router>
       <div>
-        <nav>
-          {isAuthenticated && <button onClick={handleLogout}>Logout</button>}
-        </nav>
-
         <Routes>
           <Route
             path="/"
@@ -50,9 +46,7 @@ const App: React.FC = () => {
             path="/signup"
             element={
               !isAuthenticated ? (
-                <SignUpPage
-                  setAuth={setIsAuthenticated}
-                />
+                <SignUpPage setAuth={setIsAuthenticated} />
               ) : (
                 <Navigate to="/" />
               )
@@ -62,9 +56,7 @@ const App: React.FC = () => {
             path="/login"
             element={
               !isAuthenticated ? (
-                <LoginPage
-                  setAuth={setIsAuthenticated}
-                />
+                <LoginPage setAuth={setIsAuthenticated} />
               ) : (
                 <Navigate to="/" />
               )
@@ -73,7 +65,7 @@ const App: React.FC = () => {
           <Route
             path="/post/:postid"
             element={
-              isAuthenticated ? <PostDetails/> : <Navigate to="/login" />
+              isAuthenticated ? <PostDetails /> : <Navigate to="/login" />
             }
           />
           <Route
@@ -95,6 +87,9 @@ const App: React.FC = () => {
             }
           />
         </Routes>
+        <nav>
+          {isAuthenticated && <button onClick={handleLogout}>Logout</button>}
+        </nav>
       </div>
     </Router>
   );
