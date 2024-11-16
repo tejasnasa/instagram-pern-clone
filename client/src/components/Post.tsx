@@ -23,7 +23,6 @@ const Post: React.FC<PostProps> = ({ post }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
 
-  // Fetch logged-in user ID
   useEffect(() => {
     const fetchLoggedInUserId = async () => {
       try {
@@ -85,7 +84,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
   };
 
   return (
-    <div key={post.id} className="border-white border-4 w-5/12 m-5">
+    <div key={post.id} className="w-8/12 m-5">
       <Link to={`/profile/${post.userid}`}>
         <img
           src={post.user.avatar}
@@ -96,27 +95,30 @@ const Post: React.FC<PostProps> = ({ post }) => {
       <img
         src={post.imageurl}
         alt="Post"
-        style={{
-          maxWidth: "100%",
-          height: "auto",
-          borderRadius: "8px",
-          marginBottom: "8px",
-        }}
+        className="max-h-[600px] m-auto"
       />
-      <div className="">
+      <div className="p-2">
         <span className="flex m-2">
           <FaHeart
             onClick={handleLikeToggle}
             className={`text-white cursor-pointer${
               isLiked ? "text-red-500" : ""
             }`}
-          /><CiHeart className="mr-2 ml-2"/><FaRegComment/>
+          />
+          <CiHeart className="mr-2 ml-2" />
+          <Link to={`/post/${post.id}`}>
+            <FaRegComment />
+          </Link>
         </span>
 
-        <p>{post.caption}</p>
+        <p className="font-semibold">{post.likes.length} likes</p>
+        <p className="mb-2 mt-1">{post.caption}</p>
+
+        <Link to={`/post/${post.id}`} className="text-gray-400">
+          View Comments
+        </Link>
+        <p className="text-gray-400 mt-1">Add a comment...</p>
       </div>
-      <p>Likes: {post.likes.length}</p>
-      <Link to={`/post/${post.id}`}>View Comments</Link>
     </div>
   );
 };

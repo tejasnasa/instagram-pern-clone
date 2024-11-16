@@ -1,4 +1,3 @@
-// src/pages/HomePage.tsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Post from "../components/Post";
@@ -27,9 +26,8 @@ const HomePage: React.FC = () => {
   }, []);
 
   return (
-    <main className="bg-black pl-16 pr-16 text-white">
-      <h1>Home Page</h1>
-      <section className="flex flex-wrap flex-col items-center">
+    <main className="bg-black text-white pl-96 pr-96">
+      <section className="flex flex-wrap flex-col items-center justify-center">
         {Array.isArray(posts) && posts.length > 0 ? (
           posts.map((post) => <Post key={post.id} post={post} />)
         ) : (

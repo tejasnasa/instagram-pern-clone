@@ -4,6 +4,7 @@ import {
   Route,
   Routes,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
@@ -12,6 +13,7 @@ import SignUpPage from "./pages/Signup";
 import CreatePost from "./pages/CreatePost";
 import PeoplePage from "./pages/People";
 import PostDetails from "./pages/ViewPost";
+import Navbar from "./components/Navbar";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -34,9 +36,17 @@ const App: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  const shouldShowNavbar = () => {
+    const location = window.location.pathname;
+    return !["/login", "/signup"].includes(location);
+  };
+
   return (
     <Router>
-      <div>
+      <main className="flex">
+        {isAuthenticated && shouldShowNavbar() && (
+          <Navbar handleLogout={handleLogout} />
+        )}
         <Routes>
           <Route
             path="/"
@@ -87,10 +97,7 @@ const App: React.FC = () => {
             }
           />
         </Routes>
-        <nav>
-          {isAuthenticated && <button onClick={handleLogout}>Logout</button>}
-        </nav>
-      </div>
+      </main>
     </Router>
   );
 };
