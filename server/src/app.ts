@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(
   cors({
+    origin: "https://tejas-instagram.vercel.app",
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
   })
