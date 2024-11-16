@@ -10,16 +10,14 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
-app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://tejas-instagram.vercel.app"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 app.use("/v1", masterRouter);
 
