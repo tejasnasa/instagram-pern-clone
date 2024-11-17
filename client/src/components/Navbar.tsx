@@ -6,8 +6,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { FiPlusSquare } from "react-icons/fi";
 import { MdHomeFilled, MdOutlineExplore } from "react-icons/md";
 import { RiMessengerLine } from "react-icons/ri";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 
 interface NavbarProps {
   handleLogout: () => void;
@@ -120,54 +119,9 @@ const Navbar: React.FC<NavbarProps> = ({ handleLogout }) => {
       </div>
 
       <div>
-        <button
-          id="dropdownTopButton"
-          data-dropdown-toggle="dropdownTop"
-          data-dropdown-placement="top"
-          className="me-3 mb-3 md:mb-0 text-white bg-black hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-black dark:hover:bg-black "
-          type="button"
-        >
-          <span className="text-md items-center flex ">
-            <RxHamburgerMenu size={30} className="m-2 mr-4" />
-            More
-          </span>
+        <button onClick={handleLogout} className="block px-4 py-2">
+          Logout
         </button>
-
-        <div
-          id="dropdownTop"
-          className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-[#262626] "
-        >
-          <ul
-            className="py-2 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="dropdownTopButton"
-          >
-            <li>
-              <a href="#" className="block px-4 py-2">
-                Your Activity
-              </a>
-            </li>
-            <li>
-              <a href="#" className="block px-4 py-2">
-                Settings
-              </a>
-            </li>
-            <li>
-              <a href="#" className="block px-4 py-2">
-                Saved
-              </a>
-            </li>
-            <li>
-              <a href="#" className="block px-4 py-2">
-                Switch Accounts
-              </a>
-            </li>
-          </ul>
-          <div className="py-2">
-            <button onClick={handleLogout} className="block px-4 py-2">
-              Logout
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

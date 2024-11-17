@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Post from "../components/Post";
+import People from "../components/People";
 
 const HomePage: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -26,7 +27,7 @@ const HomePage: React.FC = () => {
   }, []);
 
   return (
-    <main className="bg-black text-white pl-96 pr-96">
+    <main className="bg-black text-white pl-56 pr-56 flex">
       <section className="flex flex-wrap flex-col items-center justify-center">
         {Array.isArray(posts) && posts.length > 0 ? (
           posts.map((post) => <Post key={post.id} post={post} />)
@@ -34,6 +35,7 @@ const HomePage: React.FC = () => {
           <p>No posts available.</p>
         )}
       </section>
+      <People />
     </main>
   );
 };

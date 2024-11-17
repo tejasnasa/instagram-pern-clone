@@ -4,15 +4,19 @@ import {
   Route,
   Routes,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import ProfilePage from "./pages/Profile";
 import SignUpPage from "./pages/Signup";
 import CreatePost from "./pages/CreatePost";
-import PeoplePage from "./pages/People";
+import PeoplePage from "./components/People";
 import PostDetails from "./pages/ViewPost";
 import Navbar from "./components/Navbar";
+import Loading from "./components/Loading";
+import NotFoundPage from "./pages/NotFound";
+import Header from "./components/Header";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -20,10 +24,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (token) {
-      setIsAuthenticated(true);
-    }
-    setIsLoading(false);
+    setIsAuthenticated(!!token);
+    setTimeout(() => setIsLoading(false), 800);
   }, []);
 
   const handleLogout = () => {
@@ -31,71 +33,91 @@ const App: React.FC = () => {
     setIsAuthenticated(false);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  const shouldShowNavbar = () => {
-    const location = window.location.pathname;
-    return !["/login", "/signup"].includes(location);
+  const ShowNavbar = () => {
+    const location = useLocation();
+    const noNavbarRoutes = ["/login", "/signup"];
+    return (
+      isAuthenticated &&
+      !noNavbarRoutes.includes(location.pathname) && (
+        <Navbar handleLogout={handleLogout} />
+      )
+    );
   };
+
+  const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+    if (isLoading) return null;
+    return isAuthenticated ? children : <Navigate to="/login" />;
+  };
+
+  const PublicRoute = ({ children }: { children: JSX.Element }) => {
+    if (isLoading) return null;
+    return !isAuthenticated ? children : <Navigate to="/" />;
+  };
+
+  const LoadingScreen = () => <Loading />;
 
   return (
     <Router>
       <main className="flex">
-        {isAuthenticated && shouldShowNavbar() && (
-          <Navbar handleLogout={handleLogout} />
+        {isLoading ? (
+          <LoadingScreen />
+        ) : (
+          <>
+            <ShowNavbar />
+            <Header />
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <PublicRoute>
+                    <LoginPage setAuth={setIsAuthenticated} />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <PublicRoute>
+                    <SignUpPage setAuth={setIsAuthenticated} />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/post/:postid"
+                element={
+                  <ProtectedRoute>
+                    <PostDetails />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/create"
+                element={
+                  <ProtectedRoute>
+                    <CreatePost />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile/:id"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </>
         )}
-        <Routes>
-          <Route
-            path="/"
-            element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/signup"
-            element={
-              !isAuthenticated ? (
-                <SignUpPage setAuth={setIsAuthenticated} />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              !isAuthenticated ? (
-                <LoginPage setAuth={setIsAuthenticated} />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="/post/:postid"
-            element={
-              isAuthenticated ? <PostDetails /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/create"
-            element={
-              isAuthenticated ? <CreatePost /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/profile/:id"
-            element={
-              isAuthenticated ? <ProfilePage /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/people"
-            element={
-              isAuthenticated ? <PeoplePage /> : <Navigate to="/login" />
-            }
-          />
-        </Routes>
       </main>
     </Router>
   );

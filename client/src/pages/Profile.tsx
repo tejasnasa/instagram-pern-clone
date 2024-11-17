@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { SlOptions } from "react-icons/sl";
 import { FaHeart } from "react-icons/fa";
 import { BiSolidMessageRounded } from "react-icons/bi";
+import Loading from "../components/Loading";
 
 interface UserProfile {
   id: string;
@@ -21,6 +22,7 @@ const ProfilePage: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchLoggedInUserId = async () => {
@@ -60,16 +62,22 @@ const ProfilePage: React.FC = () => {
         }
       } catch (err) {
         console.error("Error fetching user data:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    if (!loggedInUserId) {
-      fetchLoggedInUserId();
-    }
+    const initialize = async () => {
+      setIsLoading(true);
+      if (!loggedInUserId) {
+        await fetchLoggedInUserId();
+      }
+      if (id) {
+        await fetchUserProfile();
+      }
+    };
 
-    if (loggedInUserId && id) {
-      fetchUserProfile();
-    }
+    initialize();
   }, [id, loggedInUserId]);
 
   const handleFollowToggle = async () => {
@@ -92,14 +100,26 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+  const LoadingScreen = () => <Loading />;
+
+  useEffect(() => {
+    if (userProfile) {
+      document.title = `${userProfile.username} - Profile`;
+    }
+  }, [userProfile]);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   if (!userProfile || !loggedInUserId) {
-    return <div>Loading...</div>;
+    return <div>No profile found.</div>;
   }
 
   const isSelf = loggedInUserId === userProfile.id;
 
   return (
-    <main className="bg-black text-white pl-[400px] pr-48 h-dvh w-dvw">
+    <main className="bg-black text-white pl-[250px] pr-48 min-h-dvh w-dvw">
       <section className="flex ml-12">
         <img
           src={userProfile.avatar || "default-avatar.png"}
@@ -136,7 +156,8 @@ const ProfilePage: React.FC = () => {
         </div>
       </section>
       <hr />
-      <br /><br />
+      <br />
+      <br />
       <section>
         <div className="grid grid-cols-3 gap-1">
           {userProfile.posts.length > 0 ? (
@@ -154,10 +175,12 @@ const ProfilePage: React.FC = () => {
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center text-white opacity-0 hover:opacity-100 transition-opacity">
                   <div className="flex">
                     <span className="flex items-center text-xl font-bold m-4">
-                      <FaHeart />&nbsp;{post.likes.length}
+                      <FaHeart />
+                      &nbsp;{post.likes.length}
                     </span>
                     <span className="flex items-center text-xl font-bold m-4">
-                      <BiSolidMessageRounded />&nbsp;{post.comments.length}
+                      <BiSolidMessageRounded />
+                      &nbsp;{post.comments.length}
                     </span>
                   </div>
                 </div>

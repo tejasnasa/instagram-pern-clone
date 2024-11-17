@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +9,7 @@ const CreatePost = () => {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const navigate = useNavigate();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -53,28 +55,39 @@ const CreatePost = () => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-      alert("Post created successfully!");
+      navigate("/");
     } catch (err) {
       console.error("Error during post creation:", err);
     }
   };
 
   return (
-    <div className="flex flex-col content-center">
-      <h2>Create Post</h2>
-      <input
-        type="text"
-        name="caption"
-        placeholder="Write a caption..."
-        onChange={(e) => setFormData({ ...formData, caption: e.target.value })}
-      />
+    <main className="bg-black text-white pl-[250px] pr-48 min-h-dvh w-dvw flex flex-col items-center ">
+      <h1 className="text-4xl pt-20 pb-8">CREATE POST</h1>
+      <div className="h-[82px] w-[802px] bg-gray-700 flex justify-center items-center mb-8 ">
+        <textarea
+          name="caption"
+          placeholder="Write a caption..."
+          onChange={(e) =>
+            setFormData({ ...formData, caption: e.target.value })
+          }
+          className="bg-black border-1 border-solid border-white h-20 w-[800px] flex align-middle resize-none p-3"
+        />
+      </div>
       <input type="file" accept="image/*" onChange={handleImageChange} />
       <button onClick={handleImageUpload} disabled={uploading}>
         {uploading ? "Uploading..." : "Upload Image"}
       </button>
-      {formData.imageurl && <img src={formData.imageurl} alt="Uploaded Preview" />}
-      <button onClick={handleSubmitPost}>Create Post</button>
-    </div>
+      {formData.imageurl && (
+        <img src={formData.imageurl} alt="Uploaded Preview" />
+      )}
+      <button
+        onClick={handleSubmitPost}
+        className="h-12 w-32 p-2 mt-8 border-2 border-gray-700 border-solid hover:bg-gray-700 hover:text-black"
+      >
+        Create Post
+      </button>
+    </main>
   );
 };
 
