@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { validateRegister } from "../validators/validationSchemas";
 
 interface SignUpPageProps {
   setAuth: (isAuthenticated: boolean) => void;
@@ -13,6 +14,8 @@ const SignUpPage: React.FC<SignUpPageProps> = ({ setAuth }) => {
     fullname: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
 
   const [showTimer, setShowTimer] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -38,22 +41,35 @@ const SignUpPage: React.FC<SignUpPageProps> = ({ setAuth }) => {
       ...prevData,
       [name]: value,
     }));
+    setError("");
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setShowTimer(true);
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/v1/auth/register`,
-        formData
-      );
+    const validation = validateRegister(formData);
+    if (!validation.success) {
+      setError(validation.error.errors[0].message);
+      const newErrors: any = {};
+      validation.error.errors.forEach((err) => {
+        newErrors[err.path[0]] = err.message;
+      });
+      setErrors(newErrors);
+    } else {
+      setError("");
+      setShowTimer(true);
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_BASE_URL}/v1/auth/register`,
+          formData
+        );
 
-      const { accessToken } = response.data.responseObject;
-      localStorage.setItem("accessToken", accessToken);
-      setAuth(true);
-    } catch (err) {
-      console.error("Error during signup:", err);
+        const { accessToken } = response.data.responseObject;
+        localStorage.setItem("accessToken", accessToken);
+        setAuth(true);
+      } catch (err) {
+        console.error("Error during signup:", err);
+      }
     }
   };
 
@@ -102,6 +118,20 @@ const SignUpPage: React.FC<SignUpPageProps> = ({ setAuth }) => {
                 value={formData.password}
                 onChange={handleChange}
               />
+              <div className="h-[20px] m-1 p-2">
+                {error && (
+                  <span
+                    className="w-80 text-sm"
+                    style={{
+                      color: "red",
+                      width: "320px",
+                      visibility: error ? "visible" : "hidden",
+                    }}
+                  >
+                    {error}
+                  </span>
+                )}
+              </div>
               <button
                 onClick={handleSignUp}
                 className="bg-blue-500 p-2 w-64 mt-5 font-semibold rounded-lg text-sm"
@@ -114,9 +144,7 @@ const SignUpPage: React.FC<SignUpPageProps> = ({ setAuth }) => {
               <p className="text-lg font-semibold text-green-500">
                 Verification email sent!
               </p>
-              <p className="text-gray-400 mt-2">
-                Please check your inbox.
-              </p>
+              <p className="text-gray-400 mt-2">Please check your inbox.</p>
               <p className="text-gray-300 mt-2">{`Time left: ${timeLeft}s`}</p>
             </div>
           )}

@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 const loginSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
+  usernameOrEmail: z
+    .string()
+    .min(3, { message: "Username or email should be atleast 3 characters long" }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long" }),
@@ -32,24 +34,10 @@ const registerSchema = z.object({
   bio: z.string().optional().nullable(),
 });
 
-const postSchema = z.object({
-  userid: z.string().uuid({ message: "Invalid user ID format" }),
-  caption: z
-    .string()
-    .max(255, { message: "Caption must be at most 255 characters" })
-    .optional()
-    .nullable(),
-  imageurl: z.string().url({ message: "Invalid image URL format" }).optional(),
-});
-
 export const validateRegister = (data: any) => {
   return registerSchema.safeParse(data);
 };
 
 export const validateLogin = (data: any) => {
   return loginSchema.safeParse(data);
-};
-
-export const validatePost = (data: any) => {
-  return postSchema.safeParse(data);
 };
