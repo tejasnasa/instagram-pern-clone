@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loading from "../components/Loading"; // Import your loading spinner component
 
 const CreatePost = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ const CreatePost = () => {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const navigate = useNavigate();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +30,7 @@ const CreatePost = () => {
 
     try {
       setUploading(true);
+      setIsLoading(true); // Start loading
       const response = await axios.post(
         "https://api.cloudinary.com/v1_1/dvhykaekv/image/upload",
         formData
@@ -37,9 +40,11 @@ const CreatePost = () => {
         imageurl: response.data.secure_url,
       }));
       setUploading(false);
+      setIsLoading(false); // Stop loading
     } catch (err) {
       console.error("Error uploading image:", err);
       setUploading(false);
+      setIsLoading(false); // Stop loading on error
     }
   };
 
@@ -50,16 +55,23 @@ const CreatePost = () => {
     }
 
     try {
+      setIsLoading(true); // Start loading
       await axios.post(`${import.meta.env.VITE_BASE_URL}/v1/posts`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
+      setIsLoading(false); // Stop loading
       navigate("/");
     } catch (err) {
       console.error("Error during post creation:", err);
+      setIsLoading(false); // Stop loading on error
     }
   };
+
+  if (isLoading) {
+    return <Loading />; // Show loading screen if isLoading is true
+  }
 
   return (
     <main className="bg-black text-white pl-[250px] pr-48 min-h-dvh w-dvw flex flex-col items-center ">
@@ -75,17 +87,32 @@ const CreatePost = () => {
         />
       </div>
       <input type="file" accept="image/*" onChange={handleImageChange} />
-      <button onClick={handleImageUpload} disabled={uploading}>
+      <button
+        onClick={handleImageUpload}
+        disabled={uploading}
+        className={`${
+          uploading ? "bg-gray-500" : "bg-blue-500"
+        } text-white p-2 mt-4 rounded`}
+      >
         {uploading ? "Uploading..." : "Upload Image"}
       </button>
       {formData.imageurl && (
-        <img src={formData.imageurl} alt="Uploaded Preview" />
+        <div className="mt-4">
+          <img
+            src={formData.imageurl}
+            alt="Uploaded Preview"
+            className="max-w-[400px] max-h-[400px] object-cover"
+          />
+        </div>
       )}
       <button
         onClick={handleSubmitPost}
-        className="h-12 w-32 p-2 mt-8 border-2 border-gray-700 border-solid hover:bg-gray-700 hover:text-black"
+        className={`${
+          isLoading ? "bg-gray-500" : "bg-blue-500"
+        } text-white p-3 mt-8 rounded-lg`}
+        disabled={isLoading}
       >
-        Create Post
+        {isLoading ? "Creating Post..." : "Create Post"}
       </button>
     </main>
   );

@@ -80,9 +80,6 @@ const ProfilePage: React.FC = () => {
     initialize();
   }, [id, loggedInUserId]);
 
-  console.log("Logged In User ID:", loggedInUserId);
-  console.log("Followers:", userProfile?.followers);
-
   const handleFollowToggle = async () => {
     if (!id || !loggedInUserId) return;
 
@@ -124,7 +121,7 @@ const ProfilePage: React.FC = () => {
   const isSelf = loggedInUserId === userProfile.id;
 
   return (
-    <main className="bg-black text-white pl-[250px] pr-48 min-h-dvh w-dvw">
+    <main className="bg-black text-white pl-80 pr-48 min-h-dvh w-dvw">
       <section className="flex ml-12">
         <img
           src={userProfile.avatar || "default-avatar.png"}
@@ -162,7 +159,7 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
       </section>
-      <hr />
+      <hr className="h-[0.5px] bg-gray-200 border-0 dark:bg-gray-700" />
       <br />
       <br />
       <section>

@@ -37,14 +37,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ setAuth }) => {
   };
 
   return (
-    <main className="bg-black pl-16 pr-16 text-white">
+    <main className="bg-black mr-auto ml-auto pr-16 text-white">
       <section className="w-5/6 ml-auto mr-auto flex justify-evenly h-dvh p-20">
         <img
           src="images/login.png"
           alt="login image"
           className="h-11/12"
         />
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center ml-6">
           <img
             src="images/login2.png"
             alt="instagram"

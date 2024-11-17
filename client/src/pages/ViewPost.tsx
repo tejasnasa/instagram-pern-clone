@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Post from "../components/Post";
+import Loading from "../components/Loading";
 
 interface Post {
   id: string;
@@ -39,12 +40,18 @@ const PostDetails: React.FC = () => {
     fetchPostDetails();
   }, [postid]);
 
+  useEffect(() => {
+    if (post) {
+      document.title = `${post.caption} - ${post.user.username}`;
+    }
+  }, [post]);
+
   if (!post) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
-    <main className="bg-black text-white pl-[250px] pr-32 min-h-dvh w-dvw">
+    <main className="bg-black text-white pl-96 pr-32 min-h-dvh w-dvw">
       <Post key={post.id} post={post} />
     </main>
   );
