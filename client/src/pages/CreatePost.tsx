@@ -76,16 +76,6 @@ const CreatePost = () => {
   return (
     <main className="bg-black text-white pl-[250px] pr-48 min-h-dvh w-dvw flex flex-col items-center ">
       <h1 className="text-4xl pt-20 pb-8">CREATE POST</h1>
-      <div className="h-[82px] w-[802px] bg-gray-700 flex justify-center items-center mb-8 ">
-        <textarea
-          name="caption"
-          placeholder="Write a caption..."
-          onChange={(e) =>
-            setFormData({ ...formData, caption: e.target.value })
-          }
-          className="bg-black border-1 border-solid border-white h-20 w-[800px] flex align-middle resize-none p-3"
-        />
-      </div>
       <input type="file" accept="image/*" onChange={handleImageChange} />
       <button
         onClick={handleImageUpload}
@@ -105,6 +95,16 @@ const CreatePost = () => {
           />
         </div>
       )}
+      <div className="h-[82px] w-[802px] bg-gray-700 flex justify-center items-center mb-4 mt-24">
+        <textarea
+          name="caption"
+          placeholder="Write a caption..."
+          onChange={(e) =>
+            setFormData({ ...formData, caption: e.target.value })
+          }
+          className="bg-black border-1 border-solid border-white h-20 w-[800px] flex align-middle resize-none p-3"
+        />
+      </div>
       <button
         onClick={handleSubmitPost}
         className={`${

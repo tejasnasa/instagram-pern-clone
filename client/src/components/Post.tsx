@@ -21,7 +21,7 @@ interface PostProps {
 const Post: React.FC<PostProps> = ({ post }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
-  const [likesCount, setLikesCount] = useState(post.likes.length); // Track like count
+  const [likesCount, setLikesCount] = useState(post.likes.length);
 
   useEffect(() => {
     const fetchLoggedInUserId = async () => {
@@ -55,17 +55,14 @@ const Post: React.FC<PostProps> = ({ post }) => {
 
   const handleLikeToggle = async () => {
     try {
-      // Optimistically update the like count
       if (isLiked) {
         setLikesCount(likesCount - 1);
       } else {
         setLikesCount(likesCount + 1);
       }
 
-      // Update the like state
       setIsLiked(!isLiked);
 
-      // Make the API call to like/unlike
       if (isLiked) {
         await axios.post(
           `${import.meta.env.VITE_BASE_URL}/v1/like/unlike/${post.id}`,
@@ -89,20 +86,19 @@ const Post: React.FC<PostProps> = ({ post }) => {
       }
     } catch (err) {
       console.error("Error toggling like:", err);
-      // Revert the optimistic update in case of an error
       setLikesCount(isLiked ? likesCount + 1 : likesCount - 1);
-      setIsLiked(isLiked); // Revert the like state
+      setIsLiked(isLiked);
     }
   };
 
   return (
-    <div key={post.id} className="w-8/12 m-5">
+    <div key={post.id} className="w-8/12 mr-5 ml-5 mb-5 mt-1">
       <Link to={`/profile/${post.userid}`}>
         <img
           src={post.user.avatar}
-          className="h-8 mt-2 mb-3 mr-4 rounded-full inline"
+          className="h-8 mt-2 mb-3 mr-3 rounded-full inline"
         />
-        <span className="pb-2">{post.user.username}</span>
+        <span className="pb-2 text-sm font-semibold">{post.user.username}</span>
       </Link>
       <img src={post.imageurl} alt="Post" className="max-h-[600px] m-auto" />
       <div className="pt-4">
@@ -125,13 +121,13 @@ const Post: React.FC<PostProps> = ({ post }) => {
           </Link>
         </span>
         <p className="font-semibold mt-1">{likesCount} likes</p>{" "}
-        <p className="mb-2 mt-1">{post.caption}</p>
-        <Link to={`/post/${post.id}`} className="text-gray-400">
+        <p className="mb-1 mt-1 text-sm"><span className="font-semibold">{post.user.username}</span>&nbsp;{post.caption}</p>
+        <Link to={`/post/${post.id}`} className="text-gray-400 text-sm">
           View Comments
         </Link>
-        <p className="text-gray-400 mt-1">Add a comment...</p>
+        <p className="text-gray-400 text-sm">Add a comment...</p>
       </div>
-      <hr className="h-[0.5px] mt-4 bg-gray-200 border-0 dark:bg-gray-700" />
+      <hr className="h-[1px] mt-5 bg-gray-200 border-0 dark:bg-gray-700" />
     </div>
   );
 };

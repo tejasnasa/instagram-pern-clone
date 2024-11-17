@@ -45,8 +45,8 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <main className="bg-black text-white pl-80 pr-56 flex">
-      <section className="flex flex-wrap flex-col items-center justify-center">
+    <main className="bg-black text-white pl-80 pr-52 flex">
+      <section className="flex flex-wrap flex-col items-center justify-center mt-5">
         {Array.isArray(posts) && posts.length > 0 ? (
           posts.map((post) => <Post key={post.id} post={post} />)
         ) : (

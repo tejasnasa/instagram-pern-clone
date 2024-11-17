@@ -98,7 +98,7 @@ const People: React.FC = () => {
                 <span className="text-sm font-semibold">
                   {people.username}
                 </span>
-                <span className="text-xs text-gray-300">Suggested for you</span>
+                <span className="text-xs text-gray-300 w-40">Suggested for you</span>
               </div>
             </Link>
           ))

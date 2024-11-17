@@ -154,8 +154,8 @@ const ProfilePage: React.FC = () => {
             </span>
           </div>
           <div>
-            <h5>{userProfile.fullname}</h5>
-            <p>{userProfile.bio}</p>
+            <h5 className="text-sm font-semibold">{userProfile.fullname}</h5>
+            <p className="text-sm">{userProfile.bio}</p>
           </div>
         </div>
       </section>
