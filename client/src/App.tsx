@@ -11,7 +11,6 @@ import LoginPage from "./pages/Login";
 import ProfilePage from "./pages/Profile";
 import SignUpPage from "./pages/Signup";
 import CreatePost from "./pages/CreatePost";
-import PeoplePage from "./components/People";
 import PostDetails from "./pages/ViewPost";
 import Navbar from "./components/Navbar";
 import Loading from "./components/Loading";
