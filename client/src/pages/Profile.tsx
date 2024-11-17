@@ -42,6 +42,8 @@ const ProfilePage: React.FC = () => {
     };
 
     const fetchUserProfile = async () => {
+      if (!id || !loggedInUserId) return;
+
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/v1/users/profile/${id}`,
@@ -54,12 +56,10 @@ const ProfilePage: React.FC = () => {
         const profile = response.data.responseObject;
         setUserProfile(profile);
 
-        if (loggedInUserId) {
-          const isUserFollowing = profile.followers.some(
-            (followingUser: any) => followingUser.id === loggedInUserId
-          );
-          setIsFollowing(isUserFollowing);
-        }
+        const isUserFollowing = profile.followers.some(
+          (follower: any) => follower.followerid === loggedInUserId
+        );
+        setIsFollowing(isUserFollowing);
       } catch (err) {
         console.error("Error fetching user data:", err);
       } finally {
@@ -80,7 +80,12 @@ const ProfilePage: React.FC = () => {
     initialize();
   }, [id, loggedInUserId]);
 
+  console.log("Logged In User ID:", loggedInUserId);
+  console.log("Followers:", userProfile?.followers);
+
   const handleFollowToggle = async () => {
+    if (!id || !loggedInUserId) return;
+
     try {
       const endpoint = isFollowing
         ? `${import.meta.env.VITE_BASE_URL}/v1/users/unfollow/${id}`
@@ -133,7 +138,9 @@ const ProfilePage: React.FC = () => {
             {!isSelf && (
               <button
                 onClick={handleFollowToggle}
-                className="bg-[#1877F2] pt-1 pb-1 pr-5 pl-5 mr-5 rounded-lg text-center justify-center"
+                className={`${
+                  isFollowing ? "bg-gray-400" : "bg-[#1877F2]"
+                } pt-1 pb-1 pr-5 pl-5 mr-5 rounded-lg text-center justify-center`}
               >
                 {isFollowing ? "Unfollow" : "Follow"}
               </button>

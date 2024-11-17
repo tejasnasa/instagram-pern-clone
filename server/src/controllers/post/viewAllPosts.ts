@@ -14,6 +14,9 @@ const viewAllPosts = async (req: Request, res: Response) => {
         },
         likes: true,
       },
+      orderBy: {
+        created_at: "desc",
+      },
     });
 
     res.status(200).json(ServiceResponse.success("Posts are shown", posts));
